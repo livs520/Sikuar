@@ -1,20 +1,40 @@
 "use client"
 
 import type React from "react"
-
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Badge } from "@/components/ui/badge"
-import { Sun, Moon, Calendar, Mic, Camera, Video, FileText, MoreHorizontal, Upload, X } from "lucide-react"
+import { Sun, Moon, Calendar, Mic, Camera, Video, FileText, MoreHorizontal, Upload, X, LogOut } from "lucide-react"
 
 export default function DenunciaForm() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [selectedTime, setSelectedTime] = useState("hoy")
   const [selectedFirstTime, setSelectedFirstTime] = useState("")
   const [selectedFiles, setSelectedFiles] = useState<File[]>([])
+
+  useEffect(() => {
+    // Simular verificación de autenticación
+    // En una app real, verificarías el token/sesión aquí
+    const checkAuth = () => {
+      const isLoggedIn = localStorage.getItem("isAuthenticated")
+      if (!isLoggedIn) {
+        window.location.href = "/login"
+      } else {
+        setIsAuthenticated(true)
+      }
+    }
+
+    checkAuth()
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem("isAuthenticated")
+    window.location.href = "/login"
+  }
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = Array.from(event.target.files || [])
@@ -25,8 +45,23 @@ export default function DenunciaForm() {
     setSelectedFiles((prev) => prev.filter((_, i) => i !== index))
   }
 
+  if (!isAuthenticated) {
+    return <div>Cargando...</div>
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-teal-50 to-green-50 p-4">
+      {/* Header con logout */}
+      <div className="max-w-7xl mx-auto mb-6">
+        <div className="flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-gray-800">SIKUAR - Sistema de Denuncias</h1>
+          <Button onClick={handleLogout} variant="outline" size="sm" className="flex items-center gap-2">
+            <LogOut className="w-4 h-4" />
+            Cerrar Sesión
+          </Button>
+        </div>
+      </div>
+
       <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-4 gap-6">
         {/* Panel Izquierdo - Branding */}
         <div className="lg:col-span-1">
