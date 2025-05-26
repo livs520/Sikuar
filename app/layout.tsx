@@ -48,13 +48,33 @@ export default function RootLayout({
           <body
             className={`${geistSans.variable} ${geistMono.variable} antialiased`}
           >
-            <header className="flex justify-end items-center p-4 gap-4 h-16">
+            <header className="flex justify-end items-center bg-teal-600 p-4 gap-4 h-16 shadow-md">
+              <div className="flex-1">
+              <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <span className="text-lg font-semibold text-white">
+                SIKUAR
+                </span>
+                <span className="text-sm text-white/80 hidden sm:inline">
+                Sistema de Denuncias Identificadas
+                </span>
+              </a>
+              </div>
               <SignedOut>
-                <SignInButton />
-                <SignUpButton />
+              <div className="space-x-2">
+                <SignInButton mode="modal">
+                <button className="px-4 py-2 rounded-md bg-white text-green-600 font-medium hover:bg-white/90 transition-colors">
+                  Iniciar Sesión
+                </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                <button className="px-4 py-2 rounded-md bg-green-700 text-white font-medium hover:bg-green-800 transition-colors border border-white/20">
+                  Registrarse
+                </button>
+                </SignUpButton>
+              </div>
               </SignedOut>
-              <SignedIn >
-                <UserButton />
+              <SignedIn>
+              <UserButton afterSignOutUrl="/" />
               </SignedIn>
             </header>
             <StarknetProviderWrapper>{children}</StarknetProviderWrapper>

@@ -21,7 +21,7 @@ import {
   Upload,
   X,
 } from "lucide-react";
-import { useUser } from "@clerk/nextjs";
+import { useAuth, useUser } from "@clerk/nextjs";
 import Confetti from "react-confetti";
 
 const CONTRACT_ADDRESS =
@@ -48,7 +48,7 @@ export default function DenunciaForm() {
   const { isSignedIn, user } = useUser();
 
   const chipiContract = useCallAnyContract();
-
+  const { getToken } = useAuth();
   // Debugging
   console.log("Full Chipi Contract object:", chipiContract);
 
@@ -81,6 +81,8 @@ export default function DenunciaForm() {
   // Función para manejar el envío del formulario
   const handleSubmit = async () => {
     // Recopilar todos los datos del formulario
+
+    const token = await getToken({ template: "SIKUARNFT" });
 
     if (!wallet || !pin) {
       alert("Por favor, asegúrate de estar conectado y de ingresar tu PIN.");
@@ -132,6 +134,7 @@ export default function DenunciaForm() {
 
       const payload = {
         encryptKey: pin,
+        bearerToken: token,
         wallet: {
           publicKey: wallet.publicKey,
           encryptedPrivateKey: wallet.encryptedPrivateKey,
@@ -167,11 +170,7 @@ export default function DenunciaForm() {
           console.error(
             "This appears to be a paymaster configuration issue. The transaction is failing at the contract level."
           );
-          /*alert("Transaction failed with a paymaster error. This typically happens when:\n\n" +
-                "1. The paymaster isn't properly configured\n" +
-                "2. The contract method isn't compatible with the paymaster\n" +
-                "3. The transaction parameters are incorrect\n\n" +
-                "Check the console for more details.");*/
+          console.error(err.message);
           return;
         }
 
@@ -419,13 +418,13 @@ export default function DenunciaForm() {
                       </Button>
                       <Button
                         variant={
-                          selectedFirstTime === "nariz" ? "default" : "outline"
+                          selectedFirstTime === "Nose" ? "default" : "outline"
                         }
                         size="sm"
-                        onClick={() => setSelectedFirstTime("nariz")}
+                        onClick={() => setSelectedFirstTime("Nose")}
                         className="flex items-center gap-1"
                       >
-                        🤷 Nariz
+                        🤷 Nose
                       </Button>
                     </div>
                   </div>
