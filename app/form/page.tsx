@@ -25,7 +25,7 @@ import { useUser } from "@clerk/nextjs";
 import Confetti from "react-confetti";
 
 const CONTRACT_ADDRESS =
-  "0x00a610347bf81e4d41781c1614d909fd97c14cc265b0160b60d113aeb678c8ac";
+  "0x0743389379ec44eb23891ac69ca4dbf728b85803310b57df12524298759060c4";
 
 export default function DenunciaForm() {
   // Estados existentes
@@ -143,12 +143,7 @@ export default function DenunciaForm() {
             calldata: callData,
           },
         ],
-
-        // Remove all custom parameters to ensure defaults are used
-        // The SDK should handle paymaster configuration automatically
       };
-
-      //console.log("Sending payload:", JSON.parse(JSON.stringify(payload)));
 
       // Ejecutar la transacción
       const result = await callFn(payload);
